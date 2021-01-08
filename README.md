@@ -4,10 +4,11 @@
 >Python
 
 ### Procedure
->python knowledge_base.py
->Enter the Required inputs.
+> python knowledge_base.py
+
+> Enter the Required inputs.
 
  
 ### Todo
-> implementing entire system with (pyknow/experta)
+> implementing entire system using (pyknow/experta)
 
