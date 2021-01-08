@@ -182,8 +182,9 @@ class IntelModels(Enum):
 def limit_price_rule_checker(laptops: [Laptop], upper_bound):
     tmp = [Laptop]
     for lap in laptops:
-        if int(lap.price) < int(upper_bound):
-            tmp.append(lap)
+        if 'price' in dir(lap):
+            if int(lap.price) < int(upper_bound):
+                tmp.append(lap)
     return tmp
     # return tmp
     # return list(map(lambda x: int(x.price) < int(upper_bound), laptops))

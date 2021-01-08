@@ -181,8 +181,8 @@ def find_best_laps() -> [Laptop]:
 def get_all_laptops_text(best_laps: [Laptop]):
     # this function will get list of laptops and return string of that list
     final_string = ''
-    for lap in best_laps:
-        final_string += lap.__str__() + '\n'
+    for i in range(1, len(best_laps)):
+        final_string += str(best_laps[i].__str__()) + '\n'
 
     return final_string
 
@@ -277,11 +277,12 @@ def render_screen(next_state: States):
         best_laps: [Laptop] = find_best_laps()
         laptop_result_text = get_all_laptops_text(best_laps)
         scrollbar = tk.Scrollbar(root)
-        scrollbar.pack(side=tk.LEFT, fill=Y)
+        scrollbar.pack(side=tk.LEFT, fill=tk.Y)
         lbl1 = tk.Label(root, text=AllLabels.SHOW_RESULT_LAPTOPS_LABEL.value).pack()
         # lbl2 = tk.Label(root, text=laptop_result_text).pack()
-        textbox = tk.Text(root).pack()
-        textbox.insert(tk.END,laptop_result_text)
+        textbox = tk.Text(root)
+        textbox.pack()
+        textbox.insert(tk.END, laptop_result_text)
         textbox.config(yscrollcommand=scrollbar.set)
         scrollbar.config(command=textbox.yview)
         btn = tk.Button(root,
@@ -289,7 +290,9 @@ def render_screen(next_state: States):
                         fg="red",
                         command=quit).pack()
 
-        return (lbl1, lbl2, btn)
+        return (lbl1,
+                textbox,
+                btn)
 
 
 render_screen(States.LAPTOP_TYPES_STATE)
