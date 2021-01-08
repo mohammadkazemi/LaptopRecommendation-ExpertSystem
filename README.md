@@ -1,18 +1,13 @@
 # LaptopRecommendation-ExpertSystem
 
 ### Tools Used
->Prolog
+>Python
 
 ### Procedure
->Open swipl in the terminal.    
->Run the following commands.  
-``` 
-consult('facts.pl').
-consult('rules.pl').
-consult('expert.pl').
-test().
-```
->Enter the Required inputs.  
+>python knowledge_base.py
+>Enter the Required inputs.
 
-__Voila__
+ 
+### Todo
+> implementing entire system with (pyknow/experta)
 
