@@ -130,6 +130,7 @@ def find_best_laps() -> [Laptop]:
     database = database_builder()
     final_database = [Laptop]
     show_to_user = [Laptop]
+    # first row is column names
     del database[0]
 
     if laptop_choice == 101:
@@ -174,7 +175,16 @@ def find_best_laps() -> [Laptop]:
                     final_database.append(lap)
 
     show_to_user = limit_price_rule_checker(final_database, user_upper_bound_value)
+    return show_to_user
 
+
+def get_all_laptops_text(best_laps: [Laptop]):
+    # this function will get list of laptops and return string of that list
+    final_string = ''
+    for lap in best_laps:
+        final_string += lap.__str__() + '\n'
+
+    return final_string
 
 
 def render_screen(next_state: States):
@@ -264,12 +274,16 @@ def render_screen(next_state: States):
                 radio_btn_builder(show_choice, v, dev_laptops))
 
     if next_state == States.SHOW_RESULT_LAPTOPS_STATE:
-        best_laps_str: [Laptop] = find_best_laps()
+        best_laps: [Laptop] = find_best_laps()
+        laptop_result_text = get_all_laptops_text(best_laps)
+        scrollbar = tk.Scrollbar(root)
+        scrollbar.pack(side=tk.LEFT, fill=Y)
         lbl1 = tk.Label(root, text=AllLabels.SHOW_RESULT_LAPTOPS_LABEL.value).pack()
-        lbl2 = tk.Label(root, text='laptop 1'
-                                   'laptop 2'
-                                   'laptop 3'
-                                   'laptop 4').pack()
+        # lbl2 = tk.Label(root, text=laptop_result_text).pack()
+        textbox = tk.Text(root).pack()
+        textbox.insert(tk.END,laptop_result_text)
+        textbox.config(yscrollcommand=scrollbar.set)
+        scrollbar.config(command=textbox.yview)
         btn = tk.Button(root,
                         text="QUIT",
                         fg="red",
