@@ -9,22 +9,8 @@ class Laptop:
     Discover desktop-class gaming on a notebook with the next-generation GeForce GTX 1050M/1060M/1070M.** Plus, get improved battery life you need to game longer, unplugged."
     '''
 
-    def __init__(self
-                 , laptop
-                 , brand
-                 , model
-                 , ram
-                 , hd_type
-                 , hd_size
-                 , screen_size
-                 , price
-                 , processor_brand
-                 , processor_model
-                 , clock_speed=None
-                 , gc_brand=None
-                 , gc_size=None
-                 , os=None
-                 , weight=None,
+    def __init__(self, laptop, brand, model, ram, hd_type, hd_size, screen_size, price, processor_brand,
+                 processor_model, clock_speed=None, gc_brand=None, gc_size=None, os=None, weight=None,
                  comments=None
                  ):
         self.laptop = laptop
@@ -66,22 +52,84 @@ class Laptop:
         pass
 
     def __str__(self):
-        return f' #laptop number: {self.laptop} ' \
-               f' #brand: {self.brand} ' \
-               f' #model: {self.model} ' \
-               f' #ram: {self.ram} -' \
-               f' #hd_type: {self.hd_type} -' \
-               f' #hd_size: {self.hd_size} -' \
-               f' #screen_size: {self.screen_size} ' \
-               f' #price: {self.price} ' \
-               f' #processor_brand: {self.processor_brand} ' \
-               f' #processor_model: {self.processor_model} ' \
-               f' #clock_speed: {self.clock_speed} ' \
-               f' #gc_brand: {self.gc_brand}' \
-               f' #gc_size: {self.gc_size} ' \
-               f' #os: {self.os} ' \
-               f' #weight: {self.weight} ' \
-               f' #comments: {self.comments}'
+        return f'\n# laptop number: {self.laptop} ' \
+               f'\n# brand: {self.brand} ' \
+               f'\n# model: {self.model} ' \
+               f'\n# ram: {self.ram} -' \
+               f'\n# hd_type: {self.hd_type} -' \
+               f'\n# hd_size: {self.hd_size} -' \
+               f'\n# screen_size: {self.screen_size} ' \
+               f'\n# price: {self.price} ' \
+               f'\n# processor_brand: {self.processor_brand} ' \
+               f'\n# processor_model: {self.processor_model} ' \
+               f'\n# clock_speed: {self.clock_speed} ' \
+               f'\n# gc_brand: {self.gc_brand}' \
+               f'\n# gc_size: {self.gc_size} ' \
+               f'\n# os: {self.os} ' \
+               f'\n# weight: {self.weight} ' \
+               f'\n# comments: {self.comments}'
+
+
+laptop_choice = 0
+office_laptop_choice = 0
+development_laptop_choice = 0
+
+
+def mohammad_sort(lap_list: [Laptop], laptop_choice, office_laptop_choice, development_laptop_choice) -> [Laptop]:
+    if len(lap_list) > 1:
+        best_lap: Laptop = lap_list[1]
+        # gaming
+        if laptop_choice == 101:
+            for i in range(1, len(lap_list)):
+                if float(lap_list[i].gc_size) >= float(best_lap.gc_size):
+                    best_lap = lap_list[i]
+        # home
+        if laptop_choice == 102:
+            for i in range(1, len(lap_list)):
+                if float(best_lap.clock_speed) <= float(lap_list[i].clock_speed):
+                    best_lap = lap_list[i]
+        if laptop_choice == 103:
+            # clerk
+            if office_laptop_choice == 108:
+                for i in range(1, len(lap_list)):
+                    if float(best_lap.clock_speed) <= float(lap_list[i].clock_speed):
+                        best_lap = lap_list[i]
+
+            if office_laptop_choice == 109:
+                #  mobile dev
+                if development_laptop_choice == 104:
+                    for i in range(1, len(lap_list)):
+                        if float(best_lap.clock_speed) <= float(lap_list[i].clock_speed):
+                            best_lap = lap_list[i]
+
+                # game dev
+                if development_laptop_choice == 106:
+                    for i in range(1, len(lap_list)):
+                        if float(best_lap.gc_size) <= float(lap_list[i].gc_size):
+                            best_lap = lap_list[i]
+
+                # web and scripting
+                if development_laptop_choice == 105:
+                    for i in range(1, len(lap_list)):
+                        if float(best_lap.clock_speed) <= float(lap_list[i].clock_speed):
+                            best_lap = lap_list[i]
+
+                # data science
+                if development_laptop_choice == 107:
+                    for i in range(1, len(lap_list)):
+                        if float(best_lap.gc_size) <= float(lap_list[i].gc_size):
+                            best_lap = lap_list[i]
+
+            if office_laptop_choice == 110:
+                # studio
+                if development_laptop_choice == 103:
+                    for i in range(1, len(lap_list)):
+                        if float(best_lap.clock_speed) <= float(lap_list[i].clock_speed):
+                            best_lap = lap_list[i]
+
+        return [best_lap]
+    else:
+        return []
 
 
 class IntelModels(Enum):
@@ -280,7 +328,8 @@ def isgaming(laptop: Laptop):
             screen_size_rule_checker(laptop=laptop, needed_screen_size=15, gt=True, lt=False) and
             gc_size_rule_checker(laptop=laptop, needed_memory_size=2, gt=True, lt=False) and
             os_rule_checker(laptop=laptop, os='windows') and
-            processor_brand_rule_checker(laptop=laptop, needed_model=[IntelModels.i5, IntelModels.i7, IntelModels.i9])
+            processor_brand_rule_checker(laptop=laptop, needed_model=[
+                IntelModels.i5, IntelModels.i7, IntelModels.i9])
     )
     return tmp
 

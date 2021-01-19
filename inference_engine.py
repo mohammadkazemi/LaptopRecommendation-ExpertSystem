@@ -1,7 +1,8 @@
 import tkinter as tk
 from enum import Enum
 import csv
-from knowledge_base import Laptop, is_studio, isclerk, isdev, ishome, isgaming, limit_price_rule_checker
+from knowledge_base import Laptop, is_studio, isclerk, isdev, ishome, isgaming, limit_price_rule_checker,  mohammad_sort
+from knowledge_base import laptop_choice, office_laptop_choice, development_laptop_choice
 
 
 def laptop_maker(id, brand, model, ram, hd_type, hd_size, screen_size, price, processor_brand, processor_model,
@@ -173,25 +174,27 @@ def find_best_laps() -> [Laptop]:
             for lap in database:
                 if is_studio(lap):
                     final_database.append(lap)
-
-    show_to_user = limit_price_rule_checker(final_database, user_upper_bound_value)
+    show_to_user = limit_price_rule_checker(
+        final_database, user_upper_bound_value)
     return show_to_user
 
 
 def get_all_laptops_text(best_laps: [Laptop]):
     # this function will get list of laptops and return string of that list
     final_string = ''
-    for i in range(1, len(best_laps)):
-        final_string += str(best_laps[i].__str__()) + '\n'
-
+    for i in range(len(best_laps)):
+        final_string += str(best_laps[i].__str__()) + \
+            '\n****************\n' + '****************\n'
     return final_string
 
 
 def render_screen(next_state: States):
     root.destroy()
     root.__init__()
+    root.geometry("1280x720")
     v = tk.IntVar()
     v.set(1)  # initializing the choice, i.e. Python
+
 
     def radio_btn_builder(show_choice, v, iterable_object):
         for iter_obj, val in iterable_object:
@@ -274,11 +277,18 @@ def render_screen(next_state: States):
                 radio_btn_builder(show_choice, v, dev_laptops))
 
     if next_state == States.SHOW_RESULT_LAPTOPS_STATE:
+
         best_laps: [Laptop] = find_best_laps()
-        laptop_result_text = get_all_laptops_text(best_laps)
+        laptop_of_choice = mohammad_sort(lap_list=best_laps,
+                                         laptop_choice=laptop_choice,
+                                         office_laptop_choice=office_laptop_choice,
+                                         development_laptop_choice=development_laptop_choice)
+
+        laptop_result_text = get_all_laptops_text(laptop_of_choice)
         scrollbar = tk.Scrollbar(root)
         scrollbar.pack(side=tk.LEFT, fill=tk.Y)
-        lbl1 = tk.Label(root, text=AllLabels.SHOW_RESULT_LAPTOPS_LABEL.value).pack()
+        lbl1 = tk.Label(
+            root, text=AllLabels.SHOW_RESULT_LAPTOPS_LABEL.value).pack()
         # lbl2 = tk.Label(root, text=laptop_result_text).pack()
         textbox = tk.Text(root)
         textbox.pack()
