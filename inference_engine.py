@@ -4,7 +4,9 @@ import csv
 from knowledge_base import Laptop, is_studio, isclerk, isdev, ishome, isgaming, limit_price_rule_checker,  mohammad_sort
 from knowledge_base import laptop_choice, office_laptop_choice, development_laptop_choice
 
-
+# تبدیل اطلاعات فایل 
+# csv
+# به ابجکت لبتاب تعیین شده
 def laptop_maker(id, brand, model, ram, hd_type, hd_size, screen_size, price, processor_brand, processor_model,
                  clock_speed, graphic_card_brand,
                  graphic_card_size, os, weight, comments):
@@ -55,6 +57,7 @@ def laptop_maker(id, brand, model, ram, hd_type, hd_size, screen_size, price, pr
     return laptop
 
 
+    # خواند لبتاب های موجود از فایل و تبدیلشون به ابجکت هایی از لبتاب
 def database_builder():
     # reading from database
     csvfile = open("laptops.csv", newline='')
@@ -65,6 +68,9 @@ def database_builder():
         row['id'] = i
         i = i + 1
         row['comments'] = row['comments'].replace('\n', ' ')
+# تبدیل اطلاعات فایل 
+# csv
+# به ابجکت لبتاب تعیین شده
         database.append(laptop_maker(
             id=row['id'],
             brand=row['brand'],
@@ -90,7 +96,7 @@ def database_builder():
 root = tk.Tk()
 root.title("laptop recommendation expert system")
 
-
+# حالت های مختلف برنامه
 class States(Enum):
     LAPTOP_TYPES_STATE = 1
     UPPER_BOUND_PRICE_STATE = 2
@@ -98,7 +104,7 @@ class States(Enum):
     DEV_TYPE_LAPTOP_STATE = 4
     SHOW_RESULT_LAPTOPS_STATE = 5
 
-
+# متن سوال در حالت های مختلف برنامه
 class AllLabels(Enum):
     LAPTOP_TYPES_LABEL = 'which type of laptop do you want?'
     UPPER_BOUND_PRICE_LABEL = 'Input Upper bound on Price '
@@ -106,28 +112,36 @@ class AllLabels(Enum):
     DEV_TYPE_LAPTOP_LABEL = 'what kind of development laptop do you want?'
     SHOW_RESULT_LAPTOPS_LABEL = 'with your choices this laptops is available :'
 
-
+#  اداری انواع حالت های اصلی لبتاب
 office_laptops = [('clerk', 108),
                   ('development', 109),
                   ('studio', 110)]
 
+# انواع حالت های اصلی لبتاب های مناسب توسعه
 dev_laptops = [('mobile development', 104),
                ('web and scripting', 105),
                ('game development', 106),
                ('data science', 107)]
 
+# انواع حالت های اصلی لبتاب
 laptop_types = [("gaming", 101),
                 ("home", 102),
                 ("office", 103)
                 ]
 
+
+# انتخاب های کاربر 
 user_upper_bound_value = 0
 laptop_choice = 0
 office_laptop_choice = 0
 development_laptop_choice = 0
 
-
+# تولید یک لیست از ابجکت های لبتاب با استفاده از فایل 
+# csv 
+# لبتاب های موجود
+# و فیلتر کردن لبتاب ها با استفاده از انتخاب های کاربر
 def find_best_laps() -> [Laptop]:
+    # خواند لبتاب های موجود از فایل و تبدیلشون به ابجکت هایی از لبتاب
     database = database_builder()
     final_database = [Laptop]
     show_to_user = [Laptop]
@@ -178,7 +192,7 @@ def find_best_laps() -> [Laptop]:
         final_database, user_upper_bound_value)
     return show_to_user
 
-
+# این تابع لیستی از لبتاب ها را میگیرد و معادل متنی ان را بر میگرداند
 def get_all_laptops_text(best_laps: [Laptop]):
     # this function will get list of laptops and return string of that list
     final_string = ''
@@ -187,7 +201,7 @@ def get_all_laptops_text(best_laps: [Laptop]):
             '\n****************\n' + '****************\n'
     return final_string
 
-
+# این تابع با توجه به حالت های مختلف نرم افزار صفحه ی نرم افزار را تغییر میدهد (که به دلیل اینکه تا به حال برنامه نویسی بصری با پایتون نکرده بودم مطمعن نیستم روش درستی رو پیش بردم یا نه ولی کار میکنه!!! :))
 def render_screen(next_state: States):
     root.destroy()
     root.__init__()
@@ -278,12 +292,17 @@ def render_screen(next_state: States):
 
     if next_state == States.SHOW_RESULT_LAPTOPS_STATE:
 
+# تولید لیستی از لبتاب های موجود
         best_laps: [Laptop] = find_best_laps()
+
+
+# از بین ابتاب های نهایی براس اساس انتخاب یوزر و اولویت یکی را نشان میدهیم
         laptop_of_choice = mohammad_sort(lap_list=best_laps,
                                          laptop_choice=laptop_choice,
                                          office_laptop_choice=office_laptop_choice,
                                          development_laptop_choice=development_laptop_choice)
 
+# این تابع لیستی از لبتاب ها را میگیرد و معادل متنی ان را بر میگرداند
         laptop_result_text = get_all_laptops_text(laptop_of_choice)
         scrollbar = tk.Scrollbar(root)
         scrollbar.pack(side=tk.LEFT, fill=tk.Y)
@@ -306,6 +325,7 @@ def render_screen(next_state: States):
 
 
 render_screen(States.LAPTOP_TYPES_STATE)
+# در حالت اخر اگر دکمه ی خارج زده شود این تابع فرا خوانده میشود
 exit_button = tk.Button(root,
                         text="QUIT",
                         fg="red",

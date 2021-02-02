@@ -1,6 +1,6 @@
 from enum import Enum
 
-
+# کلاس مدل لبتاب
 class Laptop:
     ''' laptop object model =>
     id,brand,model,ram,hd_type,hd_size,screen_size,price,processor_brand,processor_model,clock_speed,graphic_card_brand,graphic_card_size,os,weight,comments
@@ -69,12 +69,13 @@ class Laptop:
                f'\n# weight: {self.weight} ' \
                f'\n# comments: {self.comments}'
 
-
+# متغیر های زیر برای نگه داشتن انتخاب های کاربر است
 laptop_choice = 0
 office_laptop_choice = 0
 development_laptop_choice = 0
 
 
+# از بین ابتاب های نهایی براس اساس انتخاب یوزر و اولویت یکی را نشان میدهیم
 def mohammad_sort(lap_list: [Laptop], laptop_choice, office_laptop_choice, development_laptop_choice) -> [Laptop]:
     if len(lap_list) > 1:
         best_lap: Laptop = lap_list[1]
@@ -131,7 +132,7 @@ def mohammad_sort(lap_list: [Laptop], laptop_choice, office_laptop_choice, devel
     else:
         return []
 
-
+# انواع مدل cpu شرکت intel
 class IntelModels(Enum):
     i3 = 'i3'
     i5 = 'i5'
@@ -227,6 +228,7 @@ class IntelModels(Enum):
 #     compare_screen_size(X, Y)
 
 
+# گذاشتن محدودیت قیمت بر اساس قیمتی که کاربر زده است
 def limit_price_rule_checker(laptops: [Laptop], upper_bound):
     tmp = [Laptop]
     for lap in laptops:
@@ -238,6 +240,7 @@ def limit_price_rule_checker(laptops: [Laptop], upper_bound):
     # return list(map(lambda x: int(x.price) < int(upper_bound), laptops))
 
 
+# این تابع بر اساس قوانین اندازه صقحه لبتاب مناسب را فیلتر میکند
 def screen_size_rule_checker(laptop: Laptop, needed_screen_size, gt: bool, lt: bool):
     if gt:
         if float(laptop.screen_size) >= needed_screen_size:
@@ -249,8 +252,7 @@ def screen_size_rule_checker(laptop: Laptop, needed_screen_size, gt: bool, lt: b
             return True
         else:
             return False
-
-
+# این تابع بر اساس قوانین برند پردازش گر برند را فیلتر میکند
 def processor_brand_rule_checker(laptop: Laptop, needed_model: [IntelModels] = None):
     if str(laptop.processor_brand).lower() == "intel":
         if str(laptop.processor_model).lower() in needed_model:
@@ -262,7 +264,7 @@ def processor_brand_rule_checker(laptop: Laptop, needed_model: [IntelModels] = N
     else:
         return False
 
-
+# این تابع بر اساس قوانین حافظه ی گرافیک لبتاب مناسب را فیلتر میکند
 def gc_size_rule_checker(laptop: Laptop, needed_memory_size, gt: bool, lt: bool):
     if gt:
         if int(laptop.gc_size) >= needed_memory_size:
@@ -275,13 +277,13 @@ def gc_size_rule_checker(laptop: Laptop, needed_memory_size, gt: bool, lt: bool)
         else:
             return False
 
-
+# این تابع بر اساس قوانین سیستم عامل لبتاب مناسب را فیلتر میکند
 def os_rule_checker(laptop: Laptop, os: [str]):
     if laptop.os in os:
         return True
     return False
 
-
+# این تابع بر اساس قوانین رم لبتاب مناسب را فیلتر میکند
 def ram_rule_checker(laptop: Laptop, needed_ram, gt: bool, lt: bool):
     if gt:
         if int(laptop.ram) >= needed_ram:
@@ -294,7 +296,7 @@ def ram_rule_checker(laptop: Laptop, needed_ram, gt: bool, lt: bool):
         else:
             return False
 
-
+# این تابع بر اساس قوانین فضای ذخیره سازی دستگاه لبتاب مناسب را فیلتر میکند
 def rule_hd_size(laptop: Laptop, needed_storage_size, gt: bool, lt: bool):
     if gt:
         if int(laptop.hd_size) >= needed_storage_size:
@@ -307,7 +309,7 @@ def rule_hd_size(laptop: Laptop, needed_storage_size, gt: bool, lt: bool):
         else:
             return False
 
-
+# این تابع بر اساس قوانین سرعت پردازشگر لبتاب مناسب را فیلتر میکند
 def rule_clock_speed(laptop: Laptop, needed_clock_speed, gt: bool, lt: bool):
     if gt:
         if float(laptop.clock_speed) >= needed_clock_speed:
@@ -320,7 +322,7 @@ def rule_clock_speed(laptop: Laptop, needed_clock_speed, gt: bool, lt: bool):
         else:
             return False
 
-
+# مجموعه قوانین لبتاب مناسب بازی در صورتی که تمام این قوانین برقرار باشد لبتابی که با این تابع داده میشود انتخاب میشود و قوانین جدید برای لبتاب های مناسب بازی به این قسمت اضافه میشوند
 def isgaming(laptop: Laptop):
     tmp = (
             ram_rule_checker(laptop=laptop, needed_ram=8, gt=True, lt=False) and
@@ -333,7 +335,7 @@ def isgaming(laptop: Laptop):
     )
     return tmp
 
-
+# مجموعه قوانین لبتاب مناسب توسعه نرم افزار که اگر تمام قوانین برقرار باشد لبتابی که به این تابع داده میشود انتخاب میشود و قوانین جدید برای لبتاب های مناسب این نوع را میتوان به این تابع اضافه کرد
 def isdev(laptop: Laptop):
     return (ram_rule_checker(laptop=laptop, needed_ram=8, gt=True, lt=False) and
             rule_hd_size(laptop=laptop, needed_storage_size=256, gt=True, lt=False) and
@@ -344,6 +346,7 @@ def isdev(laptop: Laptop):
             processor_brand_rule_checker(laptop=laptop, needed_model=[IntelModels.i5, IntelModels.i7, IntelModels.i9]))
 
 
+# مجموعه قوانین لبتاب مناسب فروشگاه ها که اگر تمام قوانین برقرار باشد لبتابی که به این تابع داده میشود انتخاب میشود و قوانین جدید برای لبتاب های مناسب این نوع را میتوان به این تابع اضافه کرد
 def isclerk(laptop: Laptop):
     return (ram_rule_checker(laptop=laptop, needed_ram=2, gt=True, lt=False) and
             rule_hd_size(laptop, needed_storage_size=128, gt=True, lt=False) and
@@ -353,6 +356,7 @@ def isclerk(laptop: Laptop):
             os_rule_checker(laptop, 'windows'))
 
 
+# مجموعه قوانین لبتاب مناسب کار در خانه که اگر تمام قوانین برقرار باشد لبتابی که به این تابع داده میشود انتخاب میشود و قوانین جدید برای لبتاب های مناسب این نوع را میتوان به این تابع اضافه کرد
 def ishome(laptop: Laptop):
     return (ram_rule_checker(laptop=laptop, needed_ram=2, gt=True, lt=False) and
             rule_hd_size(laptop, needed_storage_size=128, gt=True, lt=False) and
@@ -361,6 +365,7 @@ def ishome(laptop: Laptop):
             )
 
 
+# مجموعه قوانین لبتاب مناسب استدیو های فیلم و موسیقی که اگر تمام قوانین برقرار باشد لبتابی که به این تابع داده میشود انتخاب میشود و قوانین جدید برای لبتاب های مناسب این نوع را میتوان به این تابع اضافه کرد
 def is_studio(laptop: Laptop):
     return (ram_rule_checker(laptop=laptop, needed_ram=16, gt=True, lt=False) and
             rule_hd_size(laptop, needed_storage_size=2014, gt=True, lt=False) and
